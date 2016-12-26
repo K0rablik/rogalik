@@ -1,7 +1,9 @@
 require_relative 'app'
 
+App.new
+
 begin
-    App.new
+    App.run
 ensure
     Curses.close_screen
 end
