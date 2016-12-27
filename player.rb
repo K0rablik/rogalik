@@ -1,7 +1,7 @@
 class Player
     
-    def initialize(options={})                          # options hash is needed 
-        @pos = { y: Curses.lines/2, x: Curses.cols/2 }  # only for setting @screen var
+    def initialize(options={})
+        @pos = { y: Curses.lines/2, x: Curses.cols/2 }
         @max = { y: Curses.lines, x: Curses.cols }
         @directions = { left:  { axis: :x, val: -1 }, 
                         right: { axis: :x, val: 1  },
@@ -28,23 +28,24 @@ class Player
     def wait_for_input(map)
         @key = @screen.getch
         if @keys.has_key?(key)
-            axis = @directions[@keys[key]][:axis]
-            val = @directions[@keys[key]][:val]
-            @pos[axis] += val
-            cell_pos = map[@pos[:y]][@pos[:x]].cell[:pos]
-            can_move = map[@pos[:y]][@pos[:x]].cell[:can_move]
-            if @pos == cell_pos && !can_move
-                @pos[axis] -= val # if collision is occurred
-            elsif @pos[axis] >= @max[axis] || @pos[axis] < 0
-                @pos[axis] -= val # walk over map borders, say, to another map
-                                  # is not possible yet, so method handles that case like collision
-            end
-            @prev_pos = axis == :y ? { y: @pos[:y]-val, x: @pos[:x] } :
-                                 { y: @pos[:y], x: @pos[:x]-val }
+            set_cordinates(map)
+            move(map)
         end   
     end
     
-    attr_reader :key, :pos 
+    def set_cordinates(map)
+        axis = @directions[@keys[key]][:axis]
+        val = @directions[@keys[key]][:val]
+        @pos[axis] += val
+        can_move = map[@pos[:y]][@pos[:x]].cell[:can_move]
+        if !can_move || @pos[axis] >= @max[axis] || @pos[axis] < 0
+            @pos[axis] -= val
+        end
+        @prev_pos = axis == :y ? { y: @pos[:y]-val, x: @pos[:x] } :
+                             { y: @pos[:y], x: @pos[:x]-val }
+    end
+    
+    attr_reader :key
     # getter for @key is needed in until cycle in App.new
     # getter for @pos in prospective will be needed, for example, 
     # for map constructor in case of collision on map generating stage

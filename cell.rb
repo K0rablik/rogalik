@@ -8,5 +8,6 @@ class Cell
     
     attr_reader :cell
     # getter for @cell is needed in players wait_for_input method
-    # for handling collisions
+    # for handling collisions and in move method for moving player
+    # without reloading the entire map each time 
 end

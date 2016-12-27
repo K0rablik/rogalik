@@ -17,13 +17,12 @@ class App
         end
         
         def run
-            player = Player.new(screen: @screen)
             map = Map.new(screen: @screen)
             map.read_from_file('map.txt')
             map.display
+            player = Player.new(screen: @screen)
             until player.key == 'q'
                 player.wait_for_input(map.matrix)
-                player.move(map.matrix)
             end
         end
         

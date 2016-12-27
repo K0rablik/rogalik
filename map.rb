@@ -4,10 +4,6 @@ class Map
         @matrix = []
     end
     
-    def construct
-        yield(@map)
-    end
-    
     def read_from_file(file)
         @map_to_display = File.read(file).split("\n").join
         @matrix = File.read(file).split("\n")
@@ -16,7 +12,7 @@ class Map
             @matrix[i].each_index do |j|
                 condition = @matrix[i][j] == '#'
                 @matrix[i][j] = Cell.new(can_move: condition ? false : true,
-                                      y: i, x: j, screen: @screen)
+                                         y: i, x: j, screen: @screen)
             end
         end
         return
