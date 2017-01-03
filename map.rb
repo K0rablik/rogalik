@@ -1,7 +1,7 @@
 class Map < View
     def initialize(options={})
         @matrix = []
-        @rooms = []
+        @rooms = [[]]
         super
     end
     
@@ -28,9 +28,10 @@ class Map < View
                 end
             end
         end
-        @rooms << []
         @rooms[y][x] = temp
-        if @matrix[ymax][0]
+        #p @matrix, ymax
+        unless @matrix[ymax].nil?
+            @rooms << []
             ymax += @max[:y]
             y += 1
             construct(y, x, ymax, xmax)
