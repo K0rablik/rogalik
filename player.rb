@@ -1,8 +1,6 @@
-class Player
+class Player < Creature
     
     def initialize(options={})
-        @pos = { y: Curses.lines/2, x: Curses.cols/2 }
-        @max = { y: Curses.lines, x: Curses.cols }
         @directions = { left:  { axis: :x, val: -1 }, 
                         right: { axis: :x, val: 1  },
                         down:  { axis: :y, val: 1 },
@@ -12,32 +10,23 @@ class Player
                   Curses::Key::DOWN => :down, 
                   Curses::Key::UP => :up }
         @player = '@'
-        @screen = options[:screen]
-        Curses.setpos(@pos[:y], @pos[:x])
-        @screen.addstr(@player)
+        super
+        draw(@player, @pos[:y], @pos[:x])
     end
     
-    def move(map)
-        Curses.setpos(@pos[:y], @pos[:x])
-        @screen.addstr(@player)
-        Curses.setpos(@prev_pos[:y], @prev_pos[:x])
-        cell = map[@prev_pos[:y]][@prev_pos[:x]].cell[:sym]
-        @screen.addstr(cell)
-    end
-    
-    def wait_for_input(map)
+    def wait_for_input
         @key = @screen.getch
         if @keys.has_key?(key)
-            set_cordinates(map)
-            move(map)
+            axis = @directions[@keys[key]][:axis]
+            val = @directions[@keys[key]][:val]
+            set_cordinates(axis, val)
+            move
         end   
     end
     
-    def set_cordinates(map)
-        axis = @directions[@keys[key]][:axis]
-        val = @directions[@keys[key]][:val]
+    def set_cordinates(axis, val)
         @pos[axis] += val
-        can_move = map[@pos[:y]][@pos[:x]].cell[:can_move]
+        can_move = @matrix[@pos[:y]][@pos[:x]].cell[:can_move]
         if !can_move || @pos[axis] >= @max[axis] || @pos[axis] < 0
             @pos[axis] -= val
         end
