@@ -5,7 +5,7 @@ class Creature < IngameObject
         @object[:room_pos][:x] = options[:mapx]
         @object[:room_pos][:y] = options[:mapy]
         @map = options[:map]
-        @matrix = @map.rooms[0][0]
+        @matrix = @map.rooms[@object[:room_pos][:y]][@object[:room_pos][:x]]
     end
     
     def move

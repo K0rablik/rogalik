@@ -15,8 +15,8 @@ Curses.stdscr.keypad = true
 begin
     map = Map.new(screen: @screen)
     map.read_from_file('map.txt')
-    map.display_room(0, 0)
     player = map.player
+    map.display_room(player.object[:room_pos][:y], player.object[:room_pos][:x], player: true)
     until player.key == 'q'
         player.wait_for_input
     end
@@ -24,4 +24,4 @@ ensure
     Curses.close_screen
 end
     
-#p map.rooms[1][0]
+#p map.rooms[0][1]
