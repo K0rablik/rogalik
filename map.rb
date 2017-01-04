@@ -45,7 +45,7 @@ class Map < View
         room = @rooms[y][x]
         room.each_index do |i|
             room[i].each_index do |j|
-                if j <= @max[:x] && i <= @max[:y]
+                if j < @max[:x] && i < @max[:y]
                     sym = room[i][j].object[:sym]
                     draw(sym, i, j)
                     if { y: i, x: j } == @player_pos && !@player
