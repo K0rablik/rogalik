@@ -29,9 +29,11 @@ class Player < Creature
     
     def set_cordinates(axis, val)
         @object[:pos][axis] += val
-        can_move = @matrix[@object[:pos][:y]][@object[:pos][:x]].object[:can_move]
-        if !can_move
-            @object[:pos][axis] -= val
+        unless @object[:pos][axis] >= @max[axis] || @object[:pos][axis] < 0
+            can_move = @matrix[@object[:pos][:y]][@object[:pos][:x]].object[:can_move]
+            if !can_move
+                @object[:pos][axis] -= val
+            end
         end
         @prev_pos = axis == :y ? { y: @object[:pos][:y]-val, x: @object[:pos][:x] } :
                                  { y: @object[:pos][:y], x: @object[:pos][:x]-val }
