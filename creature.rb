@@ -1,15 +1,15 @@
-class Creature < View
+class Creature < IngameObject
     def initialize(options={})
+        super
+        @object[:room_pos][:y] = options[:mapy]
+        @object[:room_pos][:x] = options[:mapx]
         @map = options[:map]
         @matrix = @map.rooms[0][0]
-        @pos = { y: @map.player_pos[:y], x: @map.player_pos[:x] }
-        @creature = ''
-        super
     end
     
     def move
-        draw(@player, @pos[:y], @pos[:x])
-        cell = @matrix[@prev_pos[:y]][@prev_pos[:x]].cell[:sym]
+        draw(@object[:sym], @object[:pos][:y], @object[:pos][:x])
+        cell = @matrix[@prev_pos[:y]][@prev_pos[:x]].object[:sym]
         draw(cell, @prev_pos[:y], @prev_pos[:x]) if cell
     end
     

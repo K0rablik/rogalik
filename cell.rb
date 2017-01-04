@@ -1,13 +1,8 @@
-class Cell
+class Cell < IngameObject
     def initialize(options={})
-        @cell = { pos: { y: options[:y], x: options[:x] },
-                  can_move: options[:can_move], 
-                  sym: options[:can_move] ? '.' : '#' }
-        @screen = options[:screen]
+        super
+        @object[:can_move] = options[:can_move]
+        @object[:sym] = @object[:can_move] ? '.' : '#'
     end
     
-    attr_reader :cell
-    # getter for @cell is needed in players wait_for_input method
-    # for handling collisions and in move method for moving player
-    # without reloading the entire map each time 
 end

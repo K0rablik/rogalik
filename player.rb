@@ -9,9 +9,7 @@ class Player < Creature
                   Curses::Key::RIGHT => :right, 
                   Curses::Key::DOWN => :down, 
                   Curses::Key::UP => :up }
-        @player = '@'
         super
-        draw(@player, @pos[:y], @pos[:x])
     end
     
     def wait_for_input
@@ -25,13 +23,13 @@ class Player < Creature
     end
     
     def set_cordinates(axis, val)
-        @pos[axis] += val
-        can_move = @matrix[@pos[:y]][@pos[:x]].cell[:can_move]
-        if !can_move || @pos[axis] >= @max[axis] || @pos[axis] < 0
-            @pos[axis] -= val
+        @object[:pos][axis] += val
+        can_move = @matrix[@object[:pos][:y]][@object[:pos][:x]].object[:can_move]
+        if !can_move || @object[:pos][axis] >= @max[axis] || @object[:pos][axis] < 0
+            @object[:pos][axis] -= val
         end
-        @prev_pos = axis == :y ? { y: @pos[:y]-val, x: @pos[:x] } :
-                             { y: @pos[:y], x: @pos[:x]-val }
+        @prev_pos = axis == :y ? { y: @object[:pos][:y]-val, x: @object[:pos][:x] } :
+                                 { y: @object[:pos][:y], x: @object[:pos][:x]-val }
     end
     
     attr_reader :key
