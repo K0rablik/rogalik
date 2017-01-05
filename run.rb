@@ -10,7 +10,6 @@ require_relative 'mob'
 Curses.noecho
 Curses.curs_set(0)
 Curses.stdscr.keypad = true
-#Curses.close_screen
 
 begin
     map = Map.new(screen: @screen)
@@ -23,5 +22,3 @@ begin
 ensure
     Curses.close_screen
 end
-    
-#p map.rooms[0][1]
