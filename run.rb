@@ -23,4 +23,3 @@ ensure
     Curses.close_screen
 end
     
-# comment
