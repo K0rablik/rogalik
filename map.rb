@@ -97,5 +97,5 @@ class Map < View
         return nil
     end
     
-    attr_reader :rooms, :player, :matrix, :mobs_pos
+    attr_reader :rooms, :player
 end
