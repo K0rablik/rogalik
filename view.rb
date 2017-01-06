@@ -2,7 +2,7 @@ class View
 
     def initialize(options={})
         @screen = options[:screen]
-        @max = { y: 24, x: 80 }
+        @max = { y: 20, x: 64 }
         @min = { y: 0, x: 0 }
     end
     
@@ -10,4 +10,5 @@ class View
         Curses.setpos(y, x)
         @screen.addstr(object)
     end
+    
 end
