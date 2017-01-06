@@ -6,8 +6,8 @@ class Mob < Creature
     
     def die
         @matrix[@object[:pos][:y]][@object[:pos][:x]].delete(:mob)
-        cell = @matrix[@object[:pos][:y]][@object[:pos][:x]][:cell].object[:sym]
-        draw(cell, @object[:pos][:y], @object[:pos][:x])
+        cell = @matrix[@object[:pos][:y]][@object[:pos][:x]][:cell]
+        cell.draw(@object[:pos][:y], @object[:pos][:x])
         @object = nil
     end
 end

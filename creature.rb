@@ -31,9 +31,9 @@ class Creature < IngameObject
     end
     
     def move
-        draw(@object[:sym], @object[:pos][:y], @object[:pos][:x])
-        cell = @matrix[@prev_pos[:y]][@prev_pos[:x]][:cell].object[:sym]
-        draw(cell, @prev_pos[:y], @prev_pos[:x]) if cell
+        self.draw(@object[:pos][:y], @object[:pos][:x])
+        cell = @matrix[@prev_pos[:y]][@prev_pos[:x]][:cell]
+        cell.draw(@prev_pos[:y], @prev_pos[:x]) if cell
     end
         
 end

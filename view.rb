@@ -6,9 +6,4 @@ class View
         @min = { y: 0, x: 0 }
     end
     
-    def draw(object, y, x)
-        Curses.setpos(y, x)
-        @screen.addstr(object)
-    end
-    
 end

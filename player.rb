@@ -53,14 +53,14 @@ class Player < Creature
     
     def move_to_another_room
         @map.display_room(@object[:room_pos][:y], @object[:room_pos][:x])
-        draw(@object[:sym], @object[:pos][:y], @object[:pos][:x])
+        self.draw(@object[:pos][:y], @object[:pos][:x])
     end
     
     def display_sidebar(mob=nil)
         y = 1
         @object[:stats].each_pair do |key, val|
             str = "#{key}: #{val.class == Array ? val.join('/') : val}"
-            draw(str, y*2, @max[:x]+3)
+            draw(y*2, @max[:x]+3, str)
             y += 1
         end
         if mob
@@ -71,7 +71,7 @@ class Player < Creature
                 str += i > mob.object[:stats][:HP][0] ? '-' : '*'
             end
             str += ']'
-            draw(str, y*2, @max[:x]+3)
+            draw(y*2, @max[:x]+3, str)
         end
     end
     

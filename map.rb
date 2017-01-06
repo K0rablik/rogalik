@@ -70,22 +70,15 @@ class Map < View
         room.each_index do |i|
             room[i].each_index do |j|
                 if j < @max[:x] && i < @max[:y]
-                    sym = room[i][j][:cell].object[:sym]
-                    draw(sym, i, j)
+                    room[i][j][:cell].draw(i, j)
                     if room[i][j][:player]
-                        sym = room[i][j][:player].object[:sym]
-                        draw(sym, i, j)
+                        room[i][j][:player].draw(i, j)
                     elsif room[i][j][:mob]
-                        sym = room[i][j][:mob].object[:sym]
-                        draw(sym, i, j)
+                        room[i][j][:mob].draw(i, j)
                     end
                 end
             end
         end
-    end
-    
-    def create_object(mapy, mapx, posy, posx, matrix)
-        
     end
     
     def room(y, x)
