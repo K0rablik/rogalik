@@ -4,4 +4,10 @@ class Mob < Creature
         @object[:stats] = { HP: [6, 6], DMG: 1, ARM: 0 }
     end
     
+    def die
+        @matrix[@object[:pos][:y]][@object[:pos][:x]].delete(:mob)
+        cell = @matrix[@object[:pos][:y]][@object[:pos][:x]][:cell].object[:sym]
+        draw(cell, @object[:pos][:y], @object[:pos][:x])
+        @object = nil
+    end
 end

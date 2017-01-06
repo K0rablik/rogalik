@@ -10,7 +10,7 @@ require_relative 'mob'
 Curses.noecho
 Curses.curs_set(0)
 Curses.stdscr.keypad = true
-#Curses.close_screen
+
 begin
     map = Map.new(screen: @screen)
     map.read_from_file('map.txt')
@@ -23,7 +23,3 @@ begin
 ensure
     Curses.close_screen
 end
-    
-#p map.rooms.nil?
-#p map.player
-#p player.matrix.nil?

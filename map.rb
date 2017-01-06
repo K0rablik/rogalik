@@ -24,7 +24,7 @@ class Map < View
     
     def construct_room(y, x, ymax, xmax)
         temp = []
-        @mobs_pos = []
+        @mobs_pos ||= []
         @matrix.each_index do |i|
             if i <= ymax && i >= ymax - @max[:y]
                 temp << []
@@ -37,17 +37,8 @@ class Map < View
                         temp[posy][posx][:cell] = Cell.new(can_move: can_move,
                                                            y: posy, x: posx, 
                                                            screen: @screen)
-                            #temp[posy][posx][:player] = Player.new(y: posy, x: posx,
-                                                                   #mapy: y, mapx: x,
-                                                                   #screen: @screen,
-                                                                   #sym: '@', map: self)
                         @player_pos = { pos: { y: posy, x: posx },
                                         room_pos: { y: y, x: x } } if @matrix[i][j] == '@'
-                            #@player = temp[posy][posx][:player]
-                        #temp[posy][posx][:mob] = Mob.new(y: posy, x: posx,
-                                                         #mapy: y, mapx: x,
-                                                         #screen: @screen,
-                                                         #sym: 'g', map: self) if @matrix[i][j] == 'g'
                         @mobs_pos << { pos: { y: posy, x: posx },
                                        room_pos: { y: y, x: x } } if @matrix[i][j] == 'g'
                     end
@@ -106,5 +97,5 @@ class Map < View
         return nil
     end
     
-    attr_reader :rooms, :player
+    attr_reader :rooms, :player, :matrix, :mobs_pos
 end

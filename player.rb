@@ -11,7 +11,6 @@ class Player < Creature
                   Curses::Key::UP => :up }
         super
         @object[:stats] = { HP: [20, 20], DMG: 2, ARM: 1 }
-        #@object[:in_fight] = false
     end
     
     def wait_for_input
@@ -20,20 +19,21 @@ class Player < Creature
             axis = @directions[@keys[key]][:axis]
             val = @directions[@keys[key]][:val]
             set_cordinates(axis, val)
-            if @matrix[@object[:pos][:y]][@object[:pos][:x]][:mob]
-                mob = @matrix[@object[:pos][:y]][@object[:pos][:x]][:mob]
-                attack(axis, val, mob)
-                if mob.object[:stats][:HP][0] <= 0
-                    mob.die
-                end
-            end
             if @object[:pos][axis] >= @max[axis] || @object[:pos][axis] < 0
                 set_room(axis, val)
                 move_to_another_room
+            elsif @matrix[@object[:pos][:y]][@object[:pos][:x]][:mob]
+                mob = @matrix[@object[:pos][:y]][@object[:pos][:x]][:mob]
+                attack(mob, axis, val)
+                sidebar = display_sidebar(mob)
+                if mob.object[:stats][:HP][0] <= 0
+                    mob.die
+                end
             else
                 move
             end
-            display_sidebar
+            sidebar ||= display_sidebar
+            sidebar
         end   
     end
     
@@ -56,47 +56,26 @@ class Player < Creature
         draw(@object[:sym], @object[:pos][:y], @object[:pos][:x])
     end
     
-    def display_sidebar
+    def display_sidebar(mob=nil)
         y = 1
         @object[:stats].each_pair do |key, val|
             str = "#{key}: #{val.class == Array ? val.join('/') : val}"
             draw(str, y*2, @max[:x]+3)
             y += 1
         end
-        #if @object[:state][:in_fight]
-            #str = '['
-            #i = 0
-            #creature.object[:stats][:HP][1].times do
-                #if creature.object[:stats][:HP][0] > i
-                    #str += '*'
-                #else 
-                    #str += '-'
-                #end
-                #i += 1
-            #end
-            #str += ']'
-            #draw(str, (y)*2, @max[:x]+3)
-        #end
-    end
-    
-    def set_cordinates(axis, val)
-        temp = @object[:pos]
-        temp[axis] += val
-        #@object[:pos][axis] += val
-        unless temp[axis] >= @max[axis] || temp[axis] < 0
-            can_move = @matrix[temp[:y]][temp[:x]][:cell].object[:can_move]
-            if can_move
-                #@object[:pos][axis] -= val
-                @matrix[temp[:y]][temp[:x]][:player] = self
-                @matrix[@object[:pos][:y]][@object[:pos][:x]].delete(:player)
-                @object[:pos] = temp
+        if mob
+            i = 0
+            str = '['
+            mob.object[:stats][:HP][1].times do
+                i += 1
+                str += i > mob.object[:stats][:HP][0] ? '-' : '*'
             end
+            str += ']'
+            draw(str, y*2, @max[:x]+3)
         end
-        @prev_pos = axis == :y ? { y: @object[:pos][:y]-val, x: @object[:pos][:x] } :
-                                 { y: @object[:pos][:y], x: @object[:pos][:x]-val }
     end
     
-    attr_reader :key, :matrix
+    attr_reader :key
     # getter for @key is needed in until cycle in App.new
     # getter for @pos in prospective will be needed, for example, 
     # for map constructor in case of collision on map generating stage
