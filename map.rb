@@ -9,10 +9,22 @@ class Map < View
         @matrix = File.read(file).split("\n")
         @matrix = @matrix.map! { |i| i.split('') }
         construct_map(0, 0, @max[:y], @max[:x])
+        @player = Player.new(y: @player_pos[:pos][:y], x: @player_pos[:pos][:x],
+                             mapy: @player_pos[:room_pos][:y], mapx: @player_pos[:room_pos][:x],
+                             screen: @screen,
+                             sym: '@', map: self)
+        @rooms[@player_pos[:room_pos][:y]][@player_pos[:room_pos][:x]][@player_pos[:pos][:y]][@player_pos[:pos][:x]][:player] = @player
+        @mobs_pos.each do |pos|
+            @rooms[pos[:room_pos][:y]][pos[:room_pos][:x]][pos[:pos][:y]][pos[:pos][:x]][:mob] = Mob.new(y: pos[:pos][:y], x: pos[:pos][:x],
+                                                                                                         mapy: pos[:room_pos][:y], mapx: pos[:room_pos][:x],
+                                                                                                         screen: @screen,
+                                                                                                         sym: 'g', map: self)
+        end
     end
     
     def construct_room(y, x, ymax, xmax)
         temp = []
+        @mobs_pos = []
         @matrix.each_index do |i|
             if i <= ymax && i >= ymax - @max[:y]
                 temp << []
@@ -25,17 +37,19 @@ class Map < View
                         temp[posy][posx][:cell] = Cell.new(can_move: can_move,
                                                            y: posy, x: posx, 
                                                            screen: @screen)
-                        if @matrix[i][j] == '@'
-                            temp[posy][posx][:player] = Player.new(y: posy, x: posx,
-                                                                   mapy: y, mapx: x,
-                                                                   screen: @screen,
-                                                                   sym: '@', map: self)
-                            @player = temp[posy][posx][:player]
-                        end
-                        temp[posy][posx][:mob] = Mob.new(y: posy, x: posx,
-                                                         mapy: y, mapx: x,
-                                                         screen: @screen,
-                                                         sym: 'g', map: self) if @matrix[i][j] == 'g'
+                            #temp[posy][posx][:player] = Player.new(y: posy, x: posx,
+                                                                   #mapy: y, mapx: x,
+                                                                   #screen: @screen,
+                                                                   #sym: '@', map: self)
+                        @player_pos = { pos: { y: posy, x: posx },
+                                        room_pos: { y: y, x: x } } if @matrix[i][j] == '@'
+                            #@player = temp[posy][posx][:player]
+                        #temp[posy][posx][:mob] = Mob.new(y: posy, x: posx,
+                                                         #mapy: y, mapx: x,
+                                                         #screen: @screen,
+                                                         #sym: 'g', map: self) if @matrix[i][j] == 'g'
+                        @mobs_pos << { pos: { y: posy, x: posx },
+                                       room_pos: { y: y, x: x } } if @matrix[i][j] == 'g'
                     end
                 end
             end

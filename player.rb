@@ -84,19 +84,19 @@ class Player < Creature
         temp[axis] += val
         #@object[:pos][axis] += val
         unless temp[axis] >= @max[axis] || temp[axis] < 0
-            can_move = @matrix[temp[:y]][temp[:x]].object[:can_move]
+            can_move = @matrix[temp[:y]][temp[:x]][:cell].object[:can_move]
             if can_move
                 #@object[:pos][axis] -= val
                 @matrix[temp[:y]][temp[:x]][:player] = self
                 @matrix[@object[:pos][:y]][@object[:pos][:x]].delete(:player)
-                @object[:pos][axis] = temp
+                @object[:pos] = temp
             end
         end
         @prev_pos = axis == :y ? { y: @object[:pos][:y]-val, x: @object[:pos][:x] } :
                                  { y: @object[:pos][:y], x: @object[:pos][:x]-val }
     end
     
-    attr_reader :key
+    attr_reader :key, :matrix
     # getter for @key is needed in until cycle in App.new
     # getter for @pos in prospective will be needed, for example, 
     # for map constructor in case of collision on map generating stage
