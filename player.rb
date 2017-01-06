@@ -76,8 +76,5 @@ class Player < Creature
     end
     
     attr_reader :key
-    # getter for @key is needed in until cycle in App.new
-    # getter for @pos in prospective will be needed, for example, 
-    # for map constructor in case of collision on map generating stage
     
 end
